@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,18 +24,20 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hienthai.dailoz_clone.R
 
 
 @Composable
-fun BaseButton(text: String, onClick: () -> Unit) {
+fun BaseButton(text: String, paddingHorizontal: Dp?, onClick: () -> Unit) {
     Button(modifier = Modifier
         .height(52.dp)
         .fillMaxWidth()
-        .padding(horizontal = 35.dp),
+        .padding(horizontal = paddingHorizontal ?: 0.dp),
         shape = RoundedCornerShape(14.dp),
         colors = ButtonDefaults.buttonColors(
             colorResource(R.color.base_color)
@@ -49,7 +52,7 @@ fun BaseButton(text: String, onClick: () -> Unit) {
 @Preview
 @Composable
 fun BaseButtonPreview() {
-    BaseButton(text = "Test") {
+    BaseButton(text = "Test", 36.dp) {
 
     }
 }
@@ -60,14 +63,23 @@ fun BaseTextField(placeHolder: String) {
     TextField(
         value = "",
         onValueChange = {},
-        placeholder = { Text(text = placeHolder) },
+        placeholder = {
+            Text(
+                text = placeHolder,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.color_text_hint)
+            )
+        },
+        singleLine = true,
         leadingIcon = {
             Icon(
                 painter = painterResource(R.drawable.ic_email), contentDescription = "print"
             )
         }, modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
+            .fillMaxWidth(),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+        )
     )
 }
 
@@ -77,8 +89,14 @@ fun PasswordTextField() {
     var password by remember { mutableStateOf("") }
     var isShowPassword by remember { mutableStateOf(false) }
     TextField(
-        value = "",
+        value = password,
         onValueChange = { password = it },
+        placeholder = {
+            Text(
+                text = "Password", fontSize = 16.sp,
+                color = colorResource(id = R.color.color_text_hint)
+            )
+        },
         leadingIcon = {
             Icon(
                 painter = painterResource(R.drawable.ic_password),
@@ -90,17 +108,24 @@ fun PasswordTextField() {
                 Icon(
                     painter = painterResource(
                         if (isShowPassword)
-                            R.drawable.ic_show_hide_pw
-                        else R.drawable.ic_email),
+                            R.drawable.ic_show_pw
+                        else R.drawable.ic_hide_pw
+                    ),
                     contentDescription = "print"
                 )
             }
 
         },
-        visualTransformation = PasswordVisualTransformation(),
+        singleLine = true,
+        visualTransformation =
+        if (!isShowPassword)
+            PasswordVisualTransformation()
+        else VisualTransformation.None,
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
+            .fillMaxWidth(),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+        )
     )
 }
 

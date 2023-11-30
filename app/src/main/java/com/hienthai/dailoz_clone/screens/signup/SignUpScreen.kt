@@ -1,4 +1,4 @@
-package com.hienthai.dailoz_clone.screens.login
+package com.hienthai.dailoz_clone.screens.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,7 +37,7 @@ import com.hienthai.dailoz_clone.screens.base.BaseTextField
 import com.hienthai.dailoz_clone.screens.base.PasswordTextField
 
 @Composable
-fun LoginScreen() {
+fun SignUpScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,24 +54,19 @@ fun LoginScreen() {
             ) {
                 Column {
                     Text(
-                        text = "Login",
+                        text = "Sign Up",
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorResource(id = R.color.base_color)
                     )
                     Spacer(modifier = Modifier.height(74.dp))
-                    BaseTextField(placeHolder = "Email ID or Username")
+                    BaseTextField(placeHolder = "Username")
+                    Spacer(modifier = Modifier.height(10.dp))
+                    BaseTextField(placeHolder = "Email Id")
                     Spacer(modifier = Modifier.height(10.dp))
                     PasswordTextField()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "Forgot Password ?",
-                        color = colorResource(id = R.color.base_color),
-                        fontSize = 12.sp,
-                        modifier = Modifier.align(Alignment.End)
-                    )
                     Spacer(modifier = Modifier.height(55.dp))
-                    BaseButton(text = "Login", null) {
+                    BaseButton(text = "Create", null) {
 
                     }
                     Spacer(modifier = Modifier.height(55.dp))
@@ -123,7 +118,7 @@ fun LoginScreen() {
                                 fontSize = 14.sp
                             )
                         ) {
-                            append("Don’t have an account?")
+                            append("Have any account?")
                         }
                         withStyle(
                             style = SpanStyle(
@@ -134,7 +129,7 @@ fun LoginScreen() {
                                 fontWeight = FontWeight.Bold
                             )
                         ) {
-                            append(" Sign Up")
+                            append(" Sign In")
                         }
                     },
                     modifier = Modifier
@@ -149,6 +144,6 @@ fun LoginScreen() {
 
 @Preview
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen()
+fun SignUpScreenPreview() {
+    SignUpScreen()
 }
