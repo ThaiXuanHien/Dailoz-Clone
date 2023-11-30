@@ -1,10 +1,17 @@
 package com.hienthai.dailoz_clone.screens.base
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,15 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -79,6 +89,12 @@ fun BaseTextField(placeHolder: String) {
             .fillMaxWidth(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
+            focusedIndicatorColor = colorResource(id = R.color.base_color),
+            unfocusedIndicatorColor = colorResource(id = R.color.color_disable),
+            focusedLeadingIconColor = colorResource(id = R.color.base_color),
+            unfocusedLeadingIconColor = colorResource(id = R.color.color_disable),
+            cursorColor = colorResource(id = R.color.base_color),
+            textColor = Color.Black
         )
     )
 }
@@ -105,14 +121,19 @@ fun PasswordTextField() {
         },
         trailingIcon = {
             IconButton(onClick = { isShowPassword = !isShowPassword }) {
-                Icon(
-                    painter = painterResource(
-                        if (isShowPassword)
-                            R.drawable.ic_show_pw
-                        else R.drawable.ic_hide_pw
-                    ),
-                    contentDescription = "print"
-                )
+                if (!isShowPassword) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_hide_pw),
+                        contentDescription = "",
+                        tint = colorResource(id = R.color.color_disable),
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_hide_pw),
+                        contentDescription = "",
+                        tint = colorResource(id = R.color.base_color),
+                    )
+                }
             }
 
         },
@@ -125,6 +146,12 @@ fun PasswordTextField() {
             .fillMaxWidth(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
+            focusedIndicatorColor = colorResource(id = R.color.base_color),
+            unfocusedIndicatorColor = colorResource(id = R.color.color_disable),
+            focusedLeadingIconColor = colorResource(id = R.color.base_color),
+            unfocusedLeadingIconColor = colorResource(id = R.color.color_disable),
+            cursorColor = colorResource(id = R.color.base_color),
+            textColor = Color.Black
         )
     )
 }
@@ -139,4 +166,92 @@ fun BaseTextFieldPreview() {
 @Composable
 fun PasswordTextFieldPreview() {
     PasswordTextField()
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BaseSearch() {
+    var text by remember { mutableStateOf("") }
+    val isTextNotEmpty by remember {
+        derivedStateOf {
+            mutableStateOf(text.isNotEmpty())
+        }
+    }
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(0.dp, Color.Transparent),
+        value = text,
+        onValueChange = {
+            text = it
+        },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = "ic_search",
+                tint = colorResource(id = R.color.color_tint_disable),
+            )
+        },
+        trailingIcon = {
+            if (isTextNotEmpty.value) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_clear),
+                    contentDescription = "ic_clear",
+                    tint = colorResource(id = R.color.base_color),
+                    modifier = Modifier.size(24.dp).clickable { text = "" }
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_clear),
+                    contentDescription = "ic_clear",
+                    tint = colorResource(id = R.color.color_tint_disable)
+                )
+            }
+
+
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.Black,
+            containerColor = colorResource(id = R.color.color_bg_search),
+            cursorColor = colorResource(R.color.base_color),
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(15.dp),
+        placeholder = {
+            Text(
+                text = "Search for task",
+                color = colorResource(id = R.color.color_text_hint_search)
+            )
+        },
+
+
+        )
+}
+
+@Preview
+@Composable
+fun BaseSearchPreview() {
+    BaseSearch()
+}
+
+@Composable
+fun FilterView() {
+    Box(
+        modifier = Modifier
+            .clip(shape = RoundedCornerShape(15.dp))
+            .background(color = colorResource(id = R.color.color_bg_search))
+            .padding(13.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_filter),
+            contentDescription = "ic_filter"
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FilterPreview() {
+    FilterView()
 }

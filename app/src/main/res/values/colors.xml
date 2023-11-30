@@ -12,5 +12,9 @@
     <color name="color_dot">#FD7694</color>
     <color name="color_text_hint">#C6CEDD</color>
     <color name="color_divider">#E3E8F1</color>
+    <color name="color_disable">#A4A4A6</color>
+    <color name="color_bg_search">#F6F6F6</color>
+    <color name="color_text_hint_search">#CED0E7</color>
+    <color name="color_tint_disable">#B0B5DD</color>
 
 </resources>
