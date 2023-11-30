@@ -1,6 +1,7 @@
 package com.hienthai.dailoz_clone.screens.splash
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -30,76 +31,64 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hienthai.dailoz_clone.R
+import com.hienthai.dailoz_clone.screens.base.BaseButton
 
 
 @Composable
 fun SplashScreen() {
-    Surface(color = Color.White) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    Image(
-                        modifier = Modifier.padding(horizontal = 42.dp),
-                        painter = painterResource(id = R.drawable.img_logo),
-                        contentDescription = ""
-                    )
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Image(
+                    modifier = Modifier.padding(horizontal = 42.dp),
+                    painter = painterResource(id = R.drawable.img_logo),
+                    contentDescription = ""
+                )
+            }
 
-                Box(
-                    modifier = Modifier.height(IntrinsicSize.Min),
-                    contentAlignment = Alignment.BottomCenter
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 55.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 55.dp)
-                            .wrapContentSize(align = Alignment.BottomCenter),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
 
-                        TextAppName()
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            modifier = Modifier.padding(horizontal = 26.dp),
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.color_text_content_splash),
-                            textAlign = TextAlign.Center,
-                            text = "Plan what you will do to be more organized for today, \ntomorrow and beyond"
-                        )
-                        Spacer(modifier = Modifier.height(65.dp))
-                        Button(
-                            modifier = Modifier
-                                .height(52.dp)
-                                .fillMaxWidth()
-                                .padding(horizontal = 35.dp),
-                            shape = RoundedCornerShape(14.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                colorResource(R.color.base_color)
-                            ),
-                            onClick = { /*TODO*/ }) {
-                            Text(
-                                text = "Login",
-                                fontSize = 16.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            fontSize = 16.sp,
-                            color = colorResource(R.color.base_color),
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            text = "Sign Up"
-                        )
+                    TextAppName()
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 26.dp),
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.color_text_content_splash),
+                        textAlign = TextAlign.Center,
+                        text = "Plan what you will do to be more organized for today, tomorrow and beyond"
+                    )
+                    Spacer(modifier = Modifier.height(65.dp))
+                    BaseButton(text = "Login", 36.dp) {
+
                     }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        fontSize = 16.sp,
+                        color = colorResource(R.color.base_color),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        text = "Sign Up"
+                    )
                 }
             }
         }
     }
-
 }
 
 @Composable
