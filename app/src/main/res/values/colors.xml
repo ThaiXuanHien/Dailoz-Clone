@@ -16,5 +16,13 @@
     <color name="color_bg_search">#F6F6F6</color>
     <color name="color_text_hint_search">#CED0E7</color>
     <color name="color_tint_disable">#B0B5DD</color>
+    <color name="color_text_item_category">#12175E</color>
+    <color name="color_text_time_item_task">#9AA8C7</color>
+    <color name="color_bg_item_task">#F9FAFD</color>
+    <color name="color_tag_home">#F0A58E</color>
+    <color name="color_tag_office">#8F81FE</color>
+    <color name="color_tag_urgent">#F57C96</color>
+    <color name="color_tag_work">#1EC1C3</color>
+    <color name="color_view_all">#393F93</color>
 
 </resources>
