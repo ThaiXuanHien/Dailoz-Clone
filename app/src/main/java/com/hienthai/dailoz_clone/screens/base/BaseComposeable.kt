@@ -1,10 +1,13 @@
 package com.hienthai.dailoz_clone.screens.base
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,19 +26,24 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,8 +65,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hienthai.dailoz_clone.DateUtil
 import com.hienthai.dailoz_clone.R
+import com.hienthai.dailoz_clone.TimeFormat
+import com.hienthai.dailoz_clone.calendar.CalendarApp
 import com.hienthai.dailoz_clone.screens.home.Tag
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Date
+import java.util.Locale
 
 
 @Composable
@@ -245,9 +262,7 @@ fun BaseSearch() {
                 color = colorResource(id = R.color.color_text_hint_search)
             )
         },
-
-
-        )
+    )
 }
 
 @Preview
@@ -285,54 +300,41 @@ fun ItemCategoryTask(
     colorText: Int,
     listColor: List<Color>
 ) {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 14.dp,
-                ambientColor = Color.fromHex("7DC8E7"),
-                spotColor = Color.fromHex("7DC8E7")
-            ),
-        elevation = CardDefaults.cardElevation(14.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listColor
-                    )
+            .clip(RoundedCornerShape(14.dp))
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listColor
                 )
-                .padding(15.dp)
-
-        ) {
-            Row(modifier = Modifier.wrapContentWidth()) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Image(
-                        painter = painterResource(id = resourceId),
-                        contentDescription = "img_category"
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = title,
-                        fontSize = 16.sp,
-                        color = colorResource(id = colorText)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "$numberTask Task",
-                        fontSize = 14.sp,
-                        color = colorResource(id = colorText)
-                    )
-                }
-                Icon(
-
-                    painter = painterResource(id = R.drawable.ic_arrow),
-                    contentDescription = "ic_arrow",
-                    tint = colorResource(id = colorText)
+            )
+            .padding(15.dp)
+    ) {
+        Row(modifier = Modifier.wrapContentWidth()) {
+            Column(modifier = Modifier.weight(1f)) {
+                Image(
+                    painter = painterResource(id = resourceId),
+                    contentDescription = "img_category"
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = title,
+                    fontSize = 16.sp,
+                    color = colorResource(id = colorText)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "$numberTask Task",
+                    fontSize = 14.sp,
+                    color = colorResource(id = colorText)
                 )
             }
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow),
+                contentDescription = "ic_arrow",
+                tint = colorResource(id = colorText)
+            )
         }
     }
 }
@@ -368,8 +370,8 @@ fun ListCategory() {
                 numberTask = 86,
                 colorText = R.color.color_text_item_category,
                 listOf(
-                    Color.fromHex("B07DC8E7"),
-                    Color.fromHex("7DC8E7")
+                    Color.fromHex("7DC8E7"),
+                    Color.fromHex("B07DC8E7")
                 )
             )
         }
@@ -380,8 +382,8 @@ fun ListCategory() {
                 numberTask = 15,
                 colorText = R.color.white,
                 listOf(
-                    Color.fromHex("BD7D88E7"),
-                    Color.fromHex("7D88E7")
+                    Color.fromHex("7D88E7"),
+                    Color.fromHex("BD7D88E7")
                 )
             )
         }
@@ -392,8 +394,8 @@ fun ListCategory() {
                 numberTask = 67,
                 colorText = R.color.color_text_item_category,
                 listOf(
-                    Color.fromHex("5981E89E"),
-                    Color.fromHex("81E89E")
+                    Color.fromHex("81E89E"),
+                    Color.fromHex("5981E89E")
                 )
             )
         }
@@ -404,8 +406,8 @@ fun ListCategory() {
                 numberTask = 15,
                 colorText = R.color.white,
                 listOf(
-                    Color.fromHex("B5E77D7D"),
-                    Color.fromHex("E77D7D")
+                    Color.fromHex("E77D7D"),
+                    Color.fromHex("B5E77D7D")
                 )
             )
         }
@@ -420,7 +422,7 @@ fun ListCategoryPreview() {
 
 
 @Composable
-fun ItemTask(title: String, colorItem: Int) {
+fun ItemTask(title: String, colorItem: Int, colorDivider: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -434,7 +436,7 @@ fun ItemTask(title: String, colorItem: Int) {
                     .height(IntrinsicSize.Min)
             ) {
                 Divider(
-                    color = colorResource(id = colorItem),
+                    color = colorResource(id = colorDivider),
                     modifier = Modifier
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(2.dp))
@@ -500,7 +502,7 @@ fun ItemTask(title: String, colorItem: Int) {
 @Preview
 @Composable
 fun ItemTaskPreview() {
-    ItemTask("Cleaning Clothes", R.color.color_bg_item_task)
+    ItemTask("Cleaning Clothes", R.color.color_bg_item_task, R.color.color_tag_office)
 }
 
 @Composable
@@ -517,7 +519,6 @@ fun ItemTag(tag: Tag) {
             color = colorResource(id = tag.color)
         )
     }
-
 }
 
 @Preview
@@ -526,5 +527,225 @@ fun ItemTagPreview() {
     ItemTag(Tag("Urgent", R.color.base_color))
 }
 
+@Composable
+fun TopBar(title: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White.copy(0.8f))
+            .padding(bottom = 15.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .shadow(
+                    elevation = 1.dp,
+                    spotColor = colorResource(id = R.color.base_color),
+                    shape = RoundedCornerShape(15.dp)
+                )
+                .background(Color.White)
+                .padding(12.dp)
+
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back_arrow),
+                contentDescription = "avatar"
+            )
+        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            text = title,
+            color = Color.Black,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Preview
+@Composable
+fun TopBarPreview() {
+    TopBar("Pending")
+}
+
+@Composable
+fun ItemCategoryTask() {
+    Column {
+        Text(
+            text = DateUtil.convertDateToTime(Date(), TimeFormat.DDMMMYYYY),
+            color = colorResource(id = R.color.color_title_task_category),
+            fontSize = 14.sp
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+        ) {
+            repeat((0..2).count()) {
+                ItemTask(
+                    title = "Cleaning Clothes ",
+                    colorItem = R.color.color_bg_item_task,
+                    R.color.color_tag_office
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ItemCategoryTaskPreview() {
+    ItemCategoryTask()
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BaseTitleTextField(title: String, isShowTrailingIcon: Boolean) {
+    Column {
+        Text(
+            text = title,
+            color = colorResource(id = R.color.color_title_text_field),
+            fontSize = 14.sp
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TextField(
+            value = "",
+            onValueChange = {},
+            placeholder = {
+                Text(
+                    text = "placeHolder",
+                    fontSize = 16.sp,
+                    color = colorResource(id = R.color.color_text_hint)
+                )
+            },
+            trailingIcon = {
+                if (isShowTrailingIcon) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_calendar),
+                        contentDescription = "ic_calendar",
+                        tint = colorResource(id = R.color.base_color),
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+            },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent,
+                focusedIndicatorColor = colorResource(id = R.color.base_color),
+                unfocusedIndicatorColor = colorResource(id = R.color.color_divider),
+                focusedLeadingIconColor = colorResource(id = R.color.base_color),
+                unfocusedLeadingIconColor = colorResource(id = R.color.color_disable),
+                cursorColor = colorResource(id = R.color.base_color),
+                textColor = Color.Black
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+fun BaseTitleTextFieldPreview() {
+    BaseTitleTextField("title", false)
+}
+
+
+@Composable
+fun checkboxResource(isSelected: Boolean): Int {
+    return if (isSelected) {
+        R.drawable.ic_checked
+    } else {
+        R.drawable.ic_unchecked
+    }
+}
+
+@Composable
+fun SelectOptionsCheckout(
+    text: String,
+    isSelectedOption: Boolean,
+    onSelectOption: (String) -> Unit
+) {
+
+    Row {
+        Icon(
+            painter = painterResource(id = checkboxResource(isSelected = isSelectedOption)),
+            contentDescription = "Checkbox",
+            modifier = Modifier
+                .clickable {
+                    onSelectOption(text)
+                },
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun CheckBoxGroup() {
+    val radioOptions = listOf("Personal", "Private", "Secret")
+
+    val (selectedOption: String, onOptionSelected: (String) -> Unit) = remember {
+        mutableStateOf(
+            radioOptions[0]
+        )
+    }
+
+    Row(
+        Modifier
+            .selectableGroup()
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        radioOptions.forEach { text ->
+            SelectOptionsCheckout(
+                text = text,
+                isSelectedOption = selectedOption == text,
+                onSelectOption = onOptionSelected
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun CheckboxPreview() {
+    CheckBoxGroup()
+}
+
+@Composable
+fun ItemTagRoundedCircle(tag: Tag) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(22.dp))
+            .background(color = colorResource(id = tag.color).copy(0.3f))
+            .padding(horizontal = 20.dp, vertical = 6.dp)
+    ) {
+        Text(
+            text = tag.content,
+            fontSize = 14.sp,
+            color = colorResource(id = tag.color)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ItemTagRoundedCirclePreview() {
+    ItemTagRoundedCircle(Tag("Urgent", R.color.base_color))
+}
+@Preview
+@Composable
+fun CalendarPreview() {
+    CalendarApp()
+}
 fun Color.Companion.fromHex(colorString: String) =
     Color(android.graphics.Color.parseColor("#$colorString"))
