@@ -1,5 +1,6 @@
 package com.hienthai.dailoz_clone.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,17 +9,24 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hienthai.dailoz_clone.DateUtil.getCurrentDate
 import com.hienthai.dailoz_clone.R
+import com.hienthai.dailoz_clone.TimeFormat
+import com.hienthai.dailoz_clone.screens.base.AddTaskSimpleTextField
 import com.hienthai.dailoz_clone.screens.base.BaseButton
 import com.hienthai.dailoz_clone.screens.base.BaseTitleTextField
 import com.hienthai.dailoz_clone.screens.base.CheckBoxGroup
@@ -28,10 +36,16 @@ import com.hienthai.dailoz_clone.screens.home.Tag
 
 @Composable
 fun AddTagScreen() {
-    Box(modifier = Modifier.padding(24.dp)) {
+    val currentDate = getCurrentDate(TimeFormat.D_MMMM_YYYY)
+    val currentHour = getCurrentDate(TimeFormat.HH_MM_a)
+    val textStartTimeState = remember { mutableStateOf(currentHour) }
+    val textEndTimeState = remember { mutableStateOf(currentHour) }
+
+
+    Box(modifier = Modifier.background(Color.White).padding(24.dp)) {
         Column {
             TopBar(title = "Add Task")
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(10.dp).background(Color.White.copy(0.8f)))
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 BaseTitleTextField(title = "Title", false)
                 Spacer(modifier = Modifier.height(20.dp))
@@ -44,7 +58,19 @@ fun AddTagScreen() {
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Row {
-
+                    AddTaskSimpleTextField(
+                        textState = textStartTimeState,
+                        isTaskToCenter = true,
+                        modifier = Modifier.weight(1f),
+                        isReadOnly = true
+                    ) {}
+                    Spacer(modifier = Modifier.width(15.dp))
+                    AddTaskSimpleTextField(
+                        textState = textEndTimeState,
+                        isTaskToCenter = true,
+                        modifier = Modifier.weight(1f),
+                        isReadOnly = true
+                    ) {}
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 BaseTitleTextField(title = "Description", isShowTrailingIcon = false)
@@ -54,6 +80,21 @@ fun AddTagScreen() {
                     color = colorResource(id = R.color.color_title_text_field),
                     fontSize = 14.sp
                 )
+                Row() {
+                    AddTaskSimpleTextField(
+                        textState = textStartTimeState,
+                        isTaskToCenter = true,
+                        modifier = Modifier.weight(1f),
+                        isReadOnly = true
+                    ) {}
+                    Spacer(modifier = Modifier.width(15.dp))
+                    AddTaskSimpleTextField(
+                        textState = textEndTimeState,
+                        isTaskToCenter = true,
+                        modifier = Modifier.weight(1f),
+                        isReadOnly = true
+                    ) {}
+                }
                 Spacer(modifier = Modifier.height(20.dp))
                 CheckBoxGroup()
                 Spacer(modifier = Modifier.height(20.dp))
@@ -113,3 +154,5 @@ fun AddTagScreen() {
 fun AddTagScreenPreview() {
     AddTagScreen()
 }
+
+const val ADD_TASK_ROUTE = "add_task_route"

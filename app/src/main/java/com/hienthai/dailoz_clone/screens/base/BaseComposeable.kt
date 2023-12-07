@@ -1,5 +1,6 @@
 package com.hienthai.dailoz_clone.screens.base
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -16,11 +17,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -32,6 +36,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -55,6 +60,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -70,6 +76,8 @@ import com.hienthai.dailoz_clone.R
 import com.hienthai.dailoz_clone.TimeFormat
 import com.hienthai.dailoz_clone.calendar.CalendarApp
 import com.hienthai.dailoz_clone.screens.home.Tag
+import com.hienthai.dailoz_clone.ui.theme.text
+import com.hienthai.dailoz_clone.ui.theme.textBold
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -106,32 +114,25 @@ fun BaseButtonPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseTextField(placeHolder: String) {
-    TextField(
-        value = "",
-        onValueChange = {},
-        placeholder = {
-            Text(
-                text = placeHolder,
-                fontSize = 16.sp,
-                color = colorResource(id = R.color.color_text_hint)
-            )
-        },
-        singleLine = true,
-        leadingIcon = {
-            Icon(
-                painter = painterResource(R.drawable.ic_email), contentDescription = "print"
-            )
-        }, modifier = Modifier
-            .fillMaxWidth(),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent,
-            focusedIndicatorColor = colorResource(id = R.color.base_color),
-            unfocusedIndicatorColor = colorResource(id = R.color.color_divider),
-            focusedLeadingIconColor = colorResource(id = R.color.base_color),
-            unfocusedLeadingIconColor = colorResource(id = R.color.color_disable),
-            cursorColor = colorResource(id = R.color.base_color),
-            textColor = Color.Black
+    TextField(value = "", onValueChange = {}, placeholder = {
+        Text(
+            text = placeHolder,
+            fontSize = 16.sp,
+            color = colorResource(id = R.color.color_text_hint)
         )
+    }, singleLine = true, leadingIcon = {
+        Icon(
+            painter = painterResource(R.drawable.ic_email), contentDescription = "print"
+        )
+    }, modifier = Modifier.fillMaxWidth(), colors = TextFieldDefaults.textFieldColors(
+        containerColor = Color.Transparent,
+        focusedIndicatorColor = colorResource(id = R.color.base_color),
+        unfocusedIndicatorColor = colorResource(id = R.color.color_divider),
+        focusedLeadingIconColor = colorResource(id = R.color.base_color),
+        unfocusedLeadingIconColor = colorResource(id = R.color.color_disable),
+        cursorColor = colorResource(id = R.color.base_color),
+        textColor = Color.Black
+    )
     )
 }
 
@@ -145,14 +146,14 @@ fun PasswordTextField() {
         onValueChange = { password = it },
         placeholder = {
             Text(
-                text = "Password", fontSize = 16.sp,
+                text = "Password",
+                fontSize = 16.sp,
                 color = colorResource(id = R.color.color_text_hint)
             )
         },
         leadingIcon = {
             Icon(
-                painter = painterResource(R.drawable.ic_password),
-                contentDescription = "print"
+                painter = painterResource(R.drawable.ic_password), contentDescription = "print"
             )
         },
         trailingIcon = {
@@ -174,12 +175,9 @@ fun PasswordTextField() {
 
         },
         singleLine = true,
-        visualTransformation =
-        if (!isShowPassword)
-            PasswordVisualTransformation()
+        visualTransformation = if (!isShowPassword) PasswordVisualTransformation()
         else VisualTransformation.None,
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
             focusedIndicatorColor = colorResource(id = R.color.base_color),
@@ -230,14 +228,12 @@ fun BaseSearch() {
         },
         trailingIcon = {
             if (isTextNotEmpty.value) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_clear),
+                Icon(painter = painterResource(id = R.drawable.ic_clear),
                     contentDescription = "ic_clear",
                     tint = colorResource(id = R.color.base_color),
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { text = "" }
-                )
+                        .clickable { text = "" })
             } else {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_clear),
@@ -258,8 +254,7 @@ fun BaseSearch() {
         shape = RoundedCornerShape(15.dp),
         placeholder = {
             Text(
-                text = "Search for task",
-                color = colorResource(id = R.color.color_text_hint_search)
+                text = "Search for task", color = colorResource(id = R.color.color_text_hint_search)
             )
         },
     )
@@ -280,8 +275,7 @@ fun FilterView() {
             .padding(13.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_filter),
-            contentDescription = "ic_filter"
+            painter = painterResource(id = R.drawable.ic_filter), contentDescription = "ic_filter"
         )
     }
 }
@@ -298,10 +292,14 @@ fun ItemCategoryTask(
     title: String,
     numberTask: Int,
     colorText: Int,
-    listColor: List<Color>
+    listColor: List<Color>,
+    onClickCategory : () -> Unit
 ) {
     Box(
         modifier = Modifier
+            .clickable {
+                onClickCategory()
+            }
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
             .background(
@@ -314,14 +312,11 @@ fun ItemCategoryTask(
         Row(modifier = Modifier.wrapContentWidth()) {
             Column(modifier = Modifier.weight(1f)) {
                 Image(
-                    painter = painterResource(id = resourceId),
-                    contentDescription = "img_category"
+                    painter = painterResource(id = resourceId), contentDescription = "img_category"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = title,
-                    fontSize = 16.sp,
-                    color = colorResource(id = colorText)
+                    text = title, fontSize = 16.sp, color = colorResource(id = colorText)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -343,82 +338,146 @@ fun ItemCategoryTask(
 @Composable
 fun CategoryTaskImagePreview() {
     ItemCategoryTask(
-        R.drawable.img_imac,
-        "Completed",
-        86,
-        R.color.color_text_item_category,
-        listOf(
-            Color.fromHex("7DC8E7"),
-            Color.fromHex("B07DC8E7")
+        R.drawable.img_imac, "Completed", 86, R.color.color_text_item_category, listOf(
+            Color.fromHex("7DC8E7"), Color.fromHex("B07DC8E7")
         )
-    )
+    ) {}
 }
 
 
 @OptIn(ExperimentalFoundationApi::class)
+//@Composable
+//fun ListCategory() {
+//    LazyVerticalStaggeredGrid(
+//        userScrollEnabled = false,
+//        columns = StaggeredGridCells.Fixed(2),
+//        horizontalArrangement = Arrangement.spacedBy(16.dp),
+//        verticalItemSpacing = 16.dp
+//    ) {
+//        item {
+//            ItemCategoryTask(
+//                resourceId = R.drawable.img_imac,
+//                title = "Completed",
+//                numberTask = 86,
+//                colorText = R.color.color_text_item_category,
+//                listOf(
+//                    Color.fromHex("7DC8E7"), Color.fromHex("B07DC8E7")
+//                )
+//            )
+//        }
+//        item {
+//            ItemCategoryTask(
+//                resourceId = R.drawable.ic_time,
+//                title = "Pending",
+//                numberTask = 15,
+//                colorText = R.color.white,
+//                listOf(
+//                    Color.fromHex("7D88E7"), Color.fromHex("BD7D88E7")
+//                )
+//            )
+//        }
+//        item {
+//            ItemCategoryTask(
+//                resourceId = R.drawable.ic_folder,
+//                title = "On Going",
+//                numberTask = 67,
+//                colorText = R.color.color_text_item_category,
+//                listOf(
+//                    Color.fromHex("81E89E"), Color.fromHex("5981E89E")
+//                )
+//            )
+//        }
+//        item {
+//            ItemCategoryTask(
+//                resourceId = R.drawable.ic_cancel,
+//                title = "Canceled",
+//                numberTask = 15,
+//                colorText = R.color.white,
+//                listOf(
+//                    Color.fromHex("E77D7D"), Color.fromHex("B5E77D7D")
+//                )
+//            )
+//        }
+//    }
+//}
+
+
 @Composable
-fun ListCategory() {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalItemSpacing = 16.dp
+fun TwoByTwoColumn(
+    onClickCompleted : () -> Unit,
+    onClickPending : () -> Unit,
+    onClickCanceled : () -> Unit,
+    onClickOnGoing : () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .wrapContentSize(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item {
+        Column(modifier = Modifier.weight(1f)) {
             ItemCategoryTask(
                 resourceId = R.drawable.img_imac,
                 title = "Completed",
                 numberTask = 86,
                 colorText = R.color.color_text_item_category,
                 listOf(
-                    Color.fromHex("7DC8E7"),
-                    Color.fromHex("B07DC8E7")
+                    Color.fromHex("7DC8E7"), Color.fromHex("B07DC8E7")
                 )
-            )
-        }
-        item {
-            ItemCategoryTask(
-                resourceId = R.drawable.ic_time,
-                title = "Pending",
-                numberTask = 15,
-                colorText = R.color.white,
-                listOf(
-                    Color.fromHex("7D88E7"),
-                    Color.fromHex("BD7D88E7")
-                )
-            )
-        }
-        item {
-            ItemCategoryTask(
-                resourceId = R.drawable.ic_folder,
-                title = "On Going",
-                numberTask = 67,
-                colorText = R.color.color_text_item_category,
-                listOf(
-                    Color.fromHex("81E89E"),
-                    Color.fromHex("5981E89E")
-                )
-            )
-        }
-        item {
+            ) {
+                onClickCompleted()
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             ItemCategoryTask(
                 resourceId = R.drawable.ic_cancel,
                 title = "Canceled",
                 numberTask = 15,
                 colorText = R.color.white,
                 listOf(
-                    Color.fromHex("E77D7D"),
-                    Color.fromHex("B5E77D7D")
+                    Color.fromHex("E77D7D"), Color.fromHex("B5E77D7D")
                 )
-            )
+            ) {
+                onClickCanceled()
+            }
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            ItemCategoryTask(
+                resourceId = R.drawable.ic_time,
+                title = "Pending",
+                numberTask = 15,
+                colorText = R.color.white,
+                listOf(
+                    Color.fromHex("7D88E7"), Color.fromHex("BD7D88E7")
+                )
+            ) {
+                onClickPending()
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            ItemCategoryTask(
+                resourceId = R.drawable.ic_folder,
+                title = "On Going",
+                numberTask = 67,
+                colorText = R.color.color_text_item_category,
+                listOf(
+                    Color.fromHex("81E89E"), Color.fromHex("5981E89E")
+                )
+            ) {
+                onClickOnGoing()
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun ListCategoryPreview() {
-    ListCategory()
+fun TwoByTwoColumnPreview() {
+    TwoByTwoColumn({},{},{},{})
 }
+
+//@Preview
+//@Composable
+//fun ListCategoryPreview() {
+//    ListCategory()
+//}
 
 
 @Composable
@@ -432,8 +491,7 @@ fun ItemTask(title: String, colorItem: Int, colorDivider: Int) {
     ) {
         Column {
             Row(
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
+                modifier = Modifier.height(IntrinsicSize.Min)
             ) {
                 Divider(
                     color = colorResource(id = colorDivider),
@@ -443,8 +501,7 @@ fun ItemTask(title: String, colorItem: Int, colorDivider: Int) {
                         .width(2.dp)
                 )
                 Spacer(
-                    modifier = Modifier
-                        .width(8.dp)
+                    modifier = Modifier.width(8.dp)
                 )
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -465,33 +522,24 @@ fun ItemTask(title: String, colorItem: Int, colorDivider: Int) {
             }
             Spacer(modifier = Modifier.height(15.dp))
             Spacer(
-                modifier = Modifier
-                    .width(8.dp)
+                modifier = Modifier.width(8.dp)
             )
-            LazyRow(
+            Row(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
-                contentPadding = PaddingValues(start = 8.dp)
             ) {
                 val listTag = listOf(
                     Tag(
-                        "Home",
-                        R.color.color_tag_home
-                    ),
-                    Tag(
-                        "Office",
-                        R.color.color_tag_office
-                    ),
-                    Tag(
-                        "Urgent",
-                        R.color.color_tag_urgent
-                    ),
-                    Tag(
-                        "Work",
-                        R.color.color_tag_work
+                        "Home", R.color.color_tag_home
+                    ), Tag(
+                        "Office", R.color.color_tag_office
+                    ), Tag(
+                        "Urgent", R.color.color_tag_urgent
+                    ), Tag(
+                        "Work", R.color.color_tag_work
                     )
                 )
-                items(items = listTag) { tag ->
-                    ItemTag(tag)
+                listTag.forEach {
+                    ItemTag(it)
                 }
             }
         }
@@ -514,9 +562,7 @@ fun ItemTag(tag: Tag) {
             .padding(horizontal = 7.dp, vertical = 2.dp)
     ) {
         Text(
-            text = tag.content,
-            fontSize = 10.sp,
-            color = colorResource(id = tag.color)
+            text = tag.content, fontSize = 10.sp, color = colorResource(id = tag.color)
         )
     }
 }
@@ -572,7 +618,7 @@ fun TopBarPreview() {
 
 @Composable
 fun ItemCategoryTask() {
-    Column {
+    Column(modifier = Modifier.wrapContentSize()) {
         Text(
             text = DateUtil.convertDateToTime(Date(), TimeFormat.DDMMMYYYY),
             color = colorResource(id = R.color.color_title_task_category),
@@ -581,8 +627,9 @@ fun ItemCategoryTask() {
         Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
+                .horizontalScroll(
+                    rememberScrollState()
+                ), horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             repeat((0..2).count()) {
                 ItemTask(
@@ -591,6 +638,8 @@ fun ItemCategoryTask() {
                     R.color.color_tag_office
                 )
             }
+
+
         }
     }
 }
@@ -627,14 +676,12 @@ fun BaseTitleTextField(title: String, isShowTrailingIcon: Boolean) {
                         painter = painterResource(id = R.drawable.ic_calendar),
                         contentDescription = "ic_calendar",
                         tint = colorResource(id = R.color.base_color),
-                        modifier = Modifier
-                            .size(24.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             },
             singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.Transparent,
                 focusedIndicatorColor = colorResource(id = R.color.base_color),
@@ -656,60 +703,90 @@ fun BaseTitleTextFieldPreview() {
 
 
 @Composable
-fun checkboxResource(isSelected: Boolean): Int {
-    return if (isSelected) {
-        R.drawable.ic_checked
-    } else {
-        R.drawable.ic_unchecked
-    }
-}
-
-@Composable
-fun SelectOptionsCheckout(
-    text: String,
-    isSelectedOption: Boolean,
-    onSelectOption: (String) -> Unit
+fun TaskTypeCheckbox(
+    isChecked: Boolean,
+    checkedIcon: Painter,
+    uncheckedIcon: Painter,
+    onCheckedChange: ((Boolean) -> Unit)?,
 ) {
-
-    Row {
-        Icon(
-            painter = painterResource(id = checkboxResource(isSelected = isSelectedOption)),
-            contentDescription = "Checkbox",
-            modifier = Modifier
-                .clickable {
-                    onSelectOption(text)
-                },
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text,
-            textAlign = TextAlign.Center
-        )
-    }
+    val interactionSource = remember { MutableInteractionSource() }
+    Image(painter = if (isChecked) checkedIcon else uncheckedIcon,
+        contentDescription = "",
+        modifier = Modifier
+            .size(18.dp)
+            .padding(1.dp)
+            .clickable(
+                interactionSource = interactionSource, indication = null
+            ) {
+                onCheckedChange?.invoke(!isChecked)
+            })
 }
 
 @Composable
 fun CheckBoxGroup() {
-    val radioOptions = listOf("Personal", "Private", "Secret")
+    val (checkedStatePersonal, onCheckedChangePersonal) = remember { mutableStateOf(false) }
+    val (checkedStatePrivate, onCheckedChangePrivate) = remember { mutableStateOf(false) }
+    val (checkedStateSecret, onCheckedChangeSecret) = remember { mutableStateOf(false) }
 
-    val (selectedOption: String, onOptionSelected: (String) -> Unit) = remember {
-        mutableStateOf(
-            radioOptions[0]
-        )
-    }
+    val checkedIcon = painterResource(id = R.drawable.ic_checked)
+    val uncheckedIcon = painterResource(id = R.drawable.ic_unchecked)
 
     Row(
-        Modifier
-            .selectableGroup()
+        modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        radioOptions.forEach { text ->
-            SelectOptionsCheckout(
-                text = text,
-                isSelectedOption = selectedOption == text,
-                onSelectOption = onOptionSelected
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            TaskTypeCheckbox(
+                isChecked = checkedStatePersonal,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
+                onCheckedChange = onCheckedChangePersonal
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = "Personal",
+                fontSize = 16.sp,
+            )
+        }
+
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            TaskTypeCheckbox(
+                isChecked = checkedStatePrivate,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
+                onCheckedChange = onCheckedChangePrivate
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = "Private",
+                fontSize = 16.sp,
+            )
+        }
+
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            TaskTypeCheckbox(
+                isChecked = checkedStateSecret,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
+                onCheckedChange = onCheckedChangeSecret
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = "Secret",
+                fontSize = 16.sp,
             )
         }
     }
@@ -730,9 +807,7 @@ fun ItemTagRoundedCircle(tag: Tag) {
             .padding(horizontal = 20.dp, vertical = 6.dp)
     ) {
         Text(
-            text = tag.content,
-            fontSize = 14.sp,
-            color = colorResource(id = tag.color)
+            text = tag.content, fontSize = 14.sp, color = colorResource(id = tag.color)
         )
     }
 }
@@ -742,10 +817,104 @@ fun ItemTagRoundedCircle(tag: Tag) {
 fun ItemTagRoundedCirclePreview() {
     ItemTagRoundedCircle(Tag("Urgent", R.color.base_color))
 }
+
+@Composable
+fun AddTaskSimpleTextField(
+    textState: MutableState<String>,
+    textHint: String = "",
+    isTaskToCenter: Boolean = false,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
+    isReadOnly: Boolean = false,
+    isSingleLine: Boolean = true,
+    startIcon: Int = -1,
+    endIcon: Int = -1,
+    iconColor: Color = colorResource(id = R.color.color_purple_white),
+    onClickTextField: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Column(
+        modifier = modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClickTextField
+            )
+    ) {
+        BasicTextField(
+            value = textState.value,
+            onValueChange = { textState.value = it },
+            modifier = Modifier.fillMaxWidth(),
+            readOnly = isReadOnly,
+            singleLine = isSingleLine,
+            textStyle = textBold.copy(
+                color = colorResource(id = R.color.title_back_action_bar),
+                fontSize = 15.sp
+            ),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 15.dp,
+                            bottom = 15.dp,
+                            start = if (startIcon != -1) 3.dp else 0.dp,
+                            end = if (endIcon != -1) 3.dp else 0.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (startIcon != -1) {
+                        Icon(
+                            painter = painterResource(id = startIcon),
+                            contentDescription = "Start Icon",
+                            tint = iconColor
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                    }
+
+                    Box(
+
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        innerTextField()
+                        if (textState.value.isEmpty()) {
+                            Text(
+                                text = textHint,
+                                modifier = if (isTaskToCenter) Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.CenterStart) else Modifier,
+                                style = text.copy(
+                                    color = colorResource(id = R.color.color_text_hint),
+                                    fontSize = 16.sp
+                                )
+                            )
+                        }
+                    }
+
+                    if (endIcon != -1) {
+                        Icon(
+                            painter = painterResource(id = endIcon),
+                            contentDescription = "End Icon",
+                            tint = iconColor
+                        )
+                    }
+                }
+            }
+        )
+
+        Divider(
+            color = colorResource(id = R.color.color_divider),
+            thickness = 1.dp
+        )
+    }
+
+}
+
 @Preview
 @Composable
 fun CalendarPreview() {
     CalendarApp()
 }
+
 fun Color.Companion.fromHex(colorString: String) =
     Color(android.graphics.Color.parseColor("#$colorString"))

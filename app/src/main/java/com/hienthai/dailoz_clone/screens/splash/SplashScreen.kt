@@ -2,6 +2,7 @@ package com.hienthai.dailoz_clone.screens.splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -35,7 +36,10 @@ import com.hienthai.dailoz_clone.screens.base.BaseButton
 
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    onLogin: () -> Unit,
+    onSingUp: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,10 +79,13 @@ fun SplashScreen() {
                     )
                     Spacer(modifier = Modifier.height(65.dp))
                     BaseButton(text = "Login", 36.dp) {
-
+                        onLogin()
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
+                        modifier = Modifier.clickable {
+                            onSingUp()
+                        },
                         fontSize = 16.sp,
                         color = colorResource(R.color.base_color),
                         textAlign = TextAlign.Center,
@@ -118,5 +125,7 @@ fun TextAppName() {
 @Preview
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen({}, {})
 }
+
+const val SPLASH_ROUTE = "splash_route"

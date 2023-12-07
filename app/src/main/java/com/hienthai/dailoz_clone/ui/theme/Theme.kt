@@ -1,6 +1,7 @@
 package com.hienthai.dailoz_clone.ui.theme
 
 import android.app.Activity
+import android.graphics.fonts.FontFamily
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
@@ -36,7 +40,14 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
-
+val text = TextStyle(
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Thin
+)
+val textBold = TextStyle(
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Bold
+)
 @Composable
 fun DailozCloneTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

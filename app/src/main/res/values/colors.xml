@@ -28,5 +28,8 @@
     <color name="color_title_task_category">#525F77</color>
     <color name="color_title_text_field">#8A8BB3</color>
     <color name="color_text_add_new_task">#A8AEDF</color>
+    <color name="title_back_action_bar">#10275A</color>
+    <color name="color_purple_white">#A8AEDF</color>
+
 
 </resources>

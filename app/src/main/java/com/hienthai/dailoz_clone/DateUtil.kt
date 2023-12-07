@@ -1,5 +1,6 @@
 package com.hienthai.dailoz_clone
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -207,6 +208,11 @@ object DateUtil {
         val date = Date(timestamp)
         return dateFormat.format(date)
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getCurrentDate(timeFormat: String = TimeFormat.HH_mm): String {
+        return SimpleDateFormat(timeFormat).format(Date())
+    }
 }
 
 object TimeFormat {
@@ -227,6 +233,8 @@ object TimeFormat {
     const val YYYYMMDDHHMMSS = "yyyyMMddHHmmss"
     const val YYYYMMDDHHMMSSSSS = "yyyyMMddHHmmssSSS"
     const val FORMAT_DISPLAY_DAY_MONTH_HOUR = "MM/dd HH:mm"
+    const val D_MMMM_YYYY = "d MMMM yyyy"
+    const val HH_MM_a = "HH:mm a"
 }
 
 object TimeZones {

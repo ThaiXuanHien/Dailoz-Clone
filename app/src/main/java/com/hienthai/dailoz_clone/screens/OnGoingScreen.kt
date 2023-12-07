@@ -65,5 +65,7 @@ fun OnGoingScreen() {
 @Preview
 @Composable
 fun OnGoingScreenPreview() {
-    CompletedScreen()
+    OnGoingScreen()
 }
+
+const val ONGOING_ROUTE = "ongoing_route"

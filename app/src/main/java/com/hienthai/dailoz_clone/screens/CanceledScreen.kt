@@ -65,5 +65,7 @@ fun CanceledScreen() {
 @Preview
 @Composable
 fun CanceledScreenPreview() {
-    CompletedScreen()
+    CanceledScreen()
 }
+
+const val CANCELED_ROUTE = "canceled_route"

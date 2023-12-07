@@ -56,9 +56,8 @@ fun CompletedScreen() {
 
                 }
             }
-            items(100) {
-//                ItemCategoryTask()
-//                Text(text = "$it")
+            items(20) {
+                ItemCategoryTask()
             }
         }
     }
@@ -69,3 +68,5 @@ fun CompletedScreen() {
 fun CompletedScreenPreview() {
     CompletedScreen()
 }
+
+const val COMPLETE_ROUTE = "complete_route"

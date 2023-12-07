@@ -37,7 +37,7 @@ import com.hienthai.dailoz_clone.screens.base.BaseTextField
 import com.hienthai.dailoz_clone.screens.base.PasswordTextField
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onGoHome : () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +72,7 @@ fun LoginScreen() {
                     )
                     Spacer(modifier = Modifier.height(55.dp))
                     BaseButton(text = "Login", null) {
-
+                        onGoHome()
                     }
                     Spacer(modifier = Modifier.height(55.dp))
                     Row(
@@ -150,5 +150,7 @@ fun LoginScreen() {
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen {}
 }
+
+const val LOGIN_ROUTE = "login_route"
